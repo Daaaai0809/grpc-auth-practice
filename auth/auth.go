@@ -16,7 +16,7 @@ func GenerateToken(userName string, role data.Role) (string, error) {
 
 	claims := token.Claims.(jwt.MapClaims)
 	claims["userName"] = userName
-	claims["role"] = role
+	claims["role"] = role.Float64()
 	claims["iat"] = time.Now().Unix()
 	claims["exp"] = time.Now().Add(time.Hour * 24).Unix()
 
@@ -64,7 +64,7 @@ func CheckAdminToken(req *proto.AdminRequest) error {
 		return errors.New("token expired")
 	}
 
-	role := claims["role"].(data.Role)
+	role := data.RoleFromFloat64(claims["role"].(float64))
 
 	if role != data.Admin {
 		return errors.New("permission denied")
@@ -98,7 +98,7 @@ func CheckUserToken(req *proto.RequiredAuthRequest) error {
 		return errors.New("token expired")
 	}
 
-	role := claims["role"].(data.Role)
+	role := data.RoleFromFloat64(claims["role"].(float64))
 
 	if role != data.Admin && role != data.User {
 		return errors.New("permission denied")
