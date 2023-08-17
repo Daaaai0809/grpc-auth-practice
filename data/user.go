@@ -8,6 +8,23 @@ const (
 	Guest
 )
 
+func (r Role) Float64() float64 {
+	return float64(r)
+}
+
+func RoleFromFloat64(f float64) Role {
+	switch f {
+	case 0:
+		return Admin
+	case 1:
+		return User
+	case 2:
+		return Guest
+	default:
+		return Guest
+	}
+}
+
 type UserData struct {
 	UserName string
 	Password string
