@@ -1,0 +1,47 @@
+syntax = "proto3";
+
+option go_package = "github.com/Daaaai0809/grpc-interceptor-sample/proto";
+
+package proto;
+
+service AuthSampleService {
+    rpc LoginMethod (LoginRequest) returns (LoginResponse) {}
+    rpc AdminMethod (AdminRequest) returns (AdminResponse) {}
+    rpc RequiredAuthMethod (RequiredAuthRequest) returns (RequiredAuthResponse) {}
+    rpc NotRequiredAuthMethod (NotRequiredAuthRequest) returns (NotRequiredAuthResponse) {}
+}
+
+message LoginRequest {
+    string userName = 1;
+    string password = 2;
+}
+
+message LoginResponse {
+    string token = 1;
+}
+
+message AdminRequest {
+    string token = 1;
+    string message = 2;
+}
+
+message AdminResponse {
+    string message = 1;
+}
+
+message RequiredAuthRequest {
+    string token = 1;
+    string message = 2;
+}
+
+message RequiredAuthResponse {
+    string message = 1;
+}
+
+message NotRequiredAuthRequest {
+    string name = 1;
+}
+
+message NotRequiredAuthResponse {
+    string message = 1;
+}
