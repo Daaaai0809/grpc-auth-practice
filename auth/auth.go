@@ -11,7 +11,7 @@ import (
 	proto "github.com/Daaaai0809/grpc-auth-practice/proto"
 )
 
-func GenerateToken(userName string, role float64) (string, error) {
+func GenerateToken(userName string, role data.Role) (string, error) {
 	token := jwt.New(jwt.GetSigningMethod("HS256"))
 
 	claims := token.Claims.(jwt.MapClaims)
@@ -23,7 +23,7 @@ func GenerateToken(userName string, role float64) (string, error) {
 	return token.SignedString([]byte("secret"))
 }
 
-func CheckPassword(userName string, password string) (float64, error) {
+func CheckPassword(userName string, password string) (data.Role, error) {
 	for _, user := range data.Users {
 		if user.UserName != userName {
 			continue
@@ -64,7 +64,7 @@ func CheckAdminToken(req *proto.AdminRequest) error {
 		return errors.New("token expired")
 	}
 
-	role := claims["role"].(float64)
+	role := claims["role"].(data.Role)
 
 	if role != data.Admin {
 		return errors.New("permission denied")
@@ -98,7 +98,7 @@ func CheckUserToken(req *proto.RequiredAuthRequest) error {
 		return errors.New("token expired")
 	}
 
-	role := claims["role"].(float64)
+	role := claims["role"].(data.Role)
 
 	if role != data.Admin && role != data.User {
 		return errors.New("permission denied")

@@ -10,7 +10,7 @@ import (
 	proto "github.com/Daaaai0809/grpc-auth-practice/proto"
 )
 
-type MethodList map[string][]float64
+type MethodList map[string][]data.Role
 
 var methodList = MethodList {
 	proto.AuthSampleService_LoginMethod_FullMethodName: {data.Guest},
@@ -19,7 +19,7 @@ var methodList = MethodList {
 	proto.AuthSampleService_NotRequiredAuthMethod_FullMethodName: {data.User, data.Guest},
 }
 
-func Contains(list []float64, role float64) bool {
+func Contains(list []data.Role, role data.Role) bool {
 	for _, v := range list {
 		if v == role {
 			return true
@@ -34,9 +34,9 @@ func AuthInterceptor(ctx context.Context, req interface{}, info *grpc.UnaryServe
 		return nil, fmt.Errorf("method not found")
 	}
 
-	if (!Contains(roles, data.Guest)) {
-		if (!Contains(roles, data.User)) {
-			if (!Contains(roles, data.Admin)) {
+	if !Contains(roles, data.Guest) {
+		if !Contains(roles, data.User) {
+			if !Contains(roles, data.Admin) {
 				return nil, fmt.Errorf("method not found")
 			}
 			_req := req.(*proto.AdminRequest)
